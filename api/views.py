@@ -1,4 +1,4 @@
-from django.views.generic import ListView
+from django.views.generic import DetailView, ListView
 
 from .models import Article, Blog
 
@@ -23,3 +23,9 @@ class ArticlesView(ListView):
         queryset = self.model.objects.filter(blog__subscribers=self.request.user.id)
         queryset = queryset.annotate_with_has_read_by_user(self.request.user).order_by('-created_on')
         return queryset
+
+
+class ArticlesDetailView(DetailView):
+    model = Article
+    context_object_name = "article"
+    queryset = Article.objects.all()

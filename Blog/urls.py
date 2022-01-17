@@ -1,5 +1,4 @@
 from django.contrib import admin
-from django.shortcuts import redirect
 from django.urls import include, path
 from django.contrib.auth import views
 
