@@ -1,4 +1,4 @@
-from django.views.generic import DetailView, ListView
+from django.views.generic import CreateView, DetailView, ListView
 
 from .models import Article, Blog
 
@@ -23,6 +23,16 @@ class ArticlesView(ListView):
         queryset = self.model.objects.filter(blog__subscribers=self.request.user.id)
         queryset = queryset.annotate_with_has_read_by_user(self.request.user).order_by('-created_on')
         return queryset
+
+
+class ArticleCreateView(CreateView):
+    model = Article
+    fields = ['title', 'text']
+    template_name = "api/article_create.html"
+
+    def form_valid(self, form):
+        form.instance.blog = self.request.user.blog
+        return super().form_valid(form)
 
 
 class ArticlesDetailView(DetailView):
