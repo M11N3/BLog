@@ -1,10 +1,21 @@
 from django.contrib.auth.models import User
 from django.db import models
+from django.db.models import Case, When, BooleanField
+
+
+class BlogQuerySet(models.QuerySet):
+    def annotate_with_is_subscribed_by_user(self, current_user, *args, **kwargs):
+        subscriptions = current_user.subscriptions.values("id")
+        return self.annotate(is_subscribed=Case(When(id__in=subscriptions, then=True),
+                                                default=False,
+                                                output_field=BooleanField()))
 
 
 class Blog(models.Model):
     author = models.OneToOneField(User, unique=True, on_delete=models.CASCADE)
     subscribers = models.ManyToManyField(User, blank=True, related_name='subscriptions')
+
+    objects = BlogQuerySet.as_manager()
 
 
 class Article(models.Model):
