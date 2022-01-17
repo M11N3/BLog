@@ -1,4 +1,5 @@
-from django.views.generic import CreateView, DetailView, ListView
+from django.shortcuts import redirect
+from django.views.generic import CreateView, DetailView, ListView, View
 
 from .models import Article, Blog
 
@@ -39,3 +40,21 @@ class ArticlesDetailView(DetailView):
     model = Article
     context_object_name = "article"
     queryset = Article.objects.all()
+
+
+class MyArticlesList(ListView):
+    model = Article
+    template_name = "api/myarticles_list.html"
+    context_object_name = "articles"
+
+    def get_queryset(self):
+        return self.model.objects.filter(blog_id=self.request.user.blog)
+
+
+class MarkAsReadAPI(View):
+    """ This API mark article as read"""
+
+    def get(self, request, pk):
+        article = Article.objects.get(id=pk)
+        article.those_who_have_read.add(request.user)
+        return redirect("/news")
