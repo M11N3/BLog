@@ -1,0 +1,17 @@
+{% extends "base.html" %}   
+
+{% block title %} My Posts {% endblock%}
+{% block menu%}<div class="additional-button"><a href="/article/create">Create New Article</a></div> {% endblock %}
+{% block content %}
+    <div class='article-box'>
+        {% for article in articles %}
+        <div class="article">
+            <h2>{{ article.title }}</h2>
+            <p>{{ article.text|truncatewords_html:59}}</p>
+            <form action="/article/{{article.id}}/">
+            <button type="submit">Прочитать</button>
+            </form>
+        </div>
+        {% endfor %}
+    </div>
+{% endblock %}

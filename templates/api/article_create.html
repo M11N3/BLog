@@ -1,0 +1,12 @@
+{% extends "base.html" %}   
+
+{% block title %} Create Article {% endblock%}
+{% block content %}
+    <form class="article-create-box" method="post">
+        <h3 align="center">Создайте свою статью</h3>
+        {% csrf_token %}
+        <div class="input-row"><input class="row" type="text" name="title" maxlength="50" required="" id="id_title" placeholder="Title"></div>
+        <div class="input-row"><textarea class="row" name="text" cols="40" rows="18" required="" id="id_text" placeholder="Enter the text of the article"></textarea></div>
+        <div class="input-row"><input class="row" type="submit" value="Создать"></div>
+    </form>
+{% endblock %}

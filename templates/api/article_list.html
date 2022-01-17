@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %} News {% endblock %}
+{% block content %}
+<div class="article-box">
+  {% for article in articles %}
+    <div class="article">
+      <h2>{{ article.title }}</h2>
+      <p>{{ article.text|truncatewords_html:59 }}</p>
+      <div class="button-box">
+        <form action="/article/{{article.id}}/markasread">
+          {% if article.has_read %}
+            <button disabled>has been read</button>
+          {% else %}
+            <button type="submit">Mark as read</button>
+          {% endif %}
+        </form>
+        <form action="/article/{{article.id}}/">
+          <button type="submit">Open Article</button>
+        </form>
+      </div>
+    </div>
+  {% endfor %}
+</div>
+{% endblock %}

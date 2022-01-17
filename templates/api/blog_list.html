@@ -1,0 +1,21 @@
+{% extends "base.html" %}   
+
+{% block title %} Blogs {% endblock%}
+{% block content %}
+    {%  for obj in object_list %}
+    <div class="blog">
+        {% if obj.is_subscribed %}
+            <form method="get" action="blog/{{obj.id}}/unsubscribe">
+                <strong name="name">{{ obj.author }}</strong>
+                <button class="subscribe" type="submit">unsubscribe</button>
+            </form>   
+        {% else %}
+            <form method="get" action="blog/{{obj.id}}/subscribe">
+                <strong name="name">{{ obj.author }}</strong>
+                <button class="subscribe" type="submit">subscribe</button>
+            </form>    
+        {% endif %}
+            
+    </div>
+    {% endfor %}
+{% endblock %}
