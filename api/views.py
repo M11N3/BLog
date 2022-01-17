@@ -58,3 +58,17 @@ class MarkAsReadAPI(View):
         article = Article.objects.get(id=pk)
         article.those_who_have_read.add(request.user)
         return redirect("/news")
+
+
+class SubscribeAPI(View):
+    def get(self, request, pk):
+        blog = Blog.objects.get(id=pk)
+        blog.subscribers.add(request.user)
+        return redirect("/blogs")
+
+
+class UnsubscribeAPI(View):
+    def get(self, request, pk):
+        blog = Blog.objects.get(id=pk)
+        blog.subscribers.remove(request.user)
+        return redirect("/blogs")
