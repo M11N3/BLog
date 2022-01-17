@@ -1,9 +1,12 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect
 from django.views.generic import CreateView, DetailView, ListView, View
+from django.utils.decorators import method_decorator
 
 from .models import Article, Blog
 
 
+@method_decorator(login_required, name="get")
 class BlogsView(ListView):
     model = Blog
     context_object_name = 'object_list'
@@ -15,6 +18,7 @@ class BlogsView(ListView):
         return queryset
 
 
+@method_decorator(login_required, name="get")
 class ArticlesView(ListView):
     model = Article
     template_name = "api/article_list.html"
@@ -26,6 +30,7 @@ class ArticlesView(ListView):
         return queryset
 
 
+@method_decorator(login_required, name="dispatch")
 class ArticleCreateView(CreateView):
     model = Article
     fields = ['title', 'text']
@@ -36,12 +41,14 @@ class ArticleCreateView(CreateView):
         return super().form_valid(form)
 
 
+@method_decorator(login_required, name="get")
 class ArticlesDetailView(DetailView):
     model = Article
     context_object_name = "article"
     queryset = Article.objects.all()
 
 
+@method_decorator(login_required, name="get")
 class MyArticlesList(ListView):
     model = Article
     template_name = "api/myarticles_list.html"
@@ -51,6 +58,7 @@ class MyArticlesList(ListView):
         return self.model.objects.filter(blog_id=self.request.user.blog)
 
 
+@method_decorator(login_required, name="get")
 class MarkAsReadAPI(View):
     """ This API mark article as read"""
 
@@ -60,6 +68,7 @@ class MarkAsReadAPI(View):
         return redirect("/news")
 
 
+@method_decorator(login_required, name="get")
 class SubscribeAPI(View):
     def get(self, request, pk):
         blog = Blog.objects.get(id=pk)
@@ -67,6 +76,7 @@ class SubscribeAPI(View):
         return redirect("/blogs")
 
 
+@method_decorator(login_required, name="get")
 class UnsubscribeAPI(View):
     def get(self, request, pk):
         blog = Blog.objects.get(id=pk)
